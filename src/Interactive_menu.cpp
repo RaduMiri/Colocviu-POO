@@ -5,7 +5,8 @@
 #include "Change.h"
 #include <typeinfo>
 #include "Progammer.h"
-Interactive_menu* Interactive_menu::ob = 0;
+Interactive_menu* Interactive_menu::ob {};
+
 void Interactive_menu::menu()
 {
     vector<WorkItem*> workitems_list;
