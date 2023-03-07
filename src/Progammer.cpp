@@ -37,7 +37,30 @@ istream& Programmer :: read(istream& in)
     cout<<"Type: ";
     in>>programmer_type;
     cout<<"Experience: ";
-    in>>programmer_experience;
+    bool programmer_experience_flag = 1;
+    while(programmer_experience_flag)
+    {
+        in>>programmer_experience;
+        try
+        {
+            if(programmer_experience)
+                programmer_experience_flag = 0;
+            else
+                throw(programmer_experience);
+        }
+        catch(...)
+        {
+            bool error_message_flag = 1;
+            if(error_message_flag)
+            {
+                cout<<"Experience must be a number\n";
+                error_message_flag = 0;
+
+            }
+            cin.clear();
+            cin.ignore();
+        }
+    }
     return in;
 }
 ostream& Programmer :: write(ostream& out)

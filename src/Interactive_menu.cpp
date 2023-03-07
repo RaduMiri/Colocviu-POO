@@ -1,12 +1,49 @@
 #include "Interactive_menu.h"
 #include <vector>
+#include <limits>
 #include "WorkItem.h"
 #include "Bug.h"
 #include "Change.h"
 #include <typeinfo>
 #include "Progammer.h"
+//template<typename T, size_t N>
+//void f(T (&arr)[N])
+//{
+//    // N gives you the size in the body
+//}
 Interactive_menu* Interactive_menu::ob {};
-
+int Interactive_menu::menu_try_catch(int x, int (&options)[10])
+{
+    bool try_catch_flag = 1;
+    while(try_catch_flag)
+    {
+        cin>>x;
+        try
+        {
+            if(x)
+            {
+                for(int i=0;i<10;i++)
+                {
+                    if(x==options[i])
+                    {
+                        try_catch_flag = 0;
+                        delete[] &options;
+                        return x;
+                    }
+                }
+                throw(x);
+            }
+            else
+                throw(x);
+        }
+        catch(...)
+        {
+            cout<<"Option invalid, try another option\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // first argument says ignore everything, second argument says stop at end of the line aka \n
+        }
+    }
+}
 void Interactive_menu::menu()
 {
     vector<WorkItem*> workitems_list;
@@ -15,13 +52,14 @@ void Interactive_menu::menu()
     while(main_menu_flag == 1)
     {
         cout<<"Main menu, press:\n1 for work item options\n2 for programmer options\n3 to exit\n"<<"\n";
-        cin>>op1;
+        int options1[10] = {1,2,3};
+        op1 = menu_try_catch(op1,options1);
         switch(op1)
         {
             case 1:
                 {
                     int op2, menu_workitem_flag = 1;
-                    while(menu_workitem_flag == 1)
+                    while(menu_workitem_flag)
                     {
                         if(programmers_list.size()<1)
                         {
@@ -30,7 +68,9 @@ void Interactive_menu::menu()
                         cout<<"\n1 for registering a bug\n2 for registering a change\n3 for deleting a bug\n";
                         cout<<"4 for deleting a change\n5 for showing all bugs\n6 for showing all changes\n";
                         cout<<"7 for showing all work items\n9 for returning to the main menu\n"<<"\n";
-                        cin>>op2;
+                        int options2[10] = {1,2,3,4,5,6,7,9};
+                        cout<<&options2<<" ";
+                        op2 = menu_try_catch(op2, options2);
                         switch(op2)
                         {
                         case 1:
@@ -38,9 +78,37 @@ void Interactive_menu::menu()
                                 Bug *temp;
                                 temp = new Bug;
                                 cin>>*temp;
-                                cout<<"\n";
+                                if(programmers_list.size()<1)
+                                {
+                                    cout<<"No programmer was assigned\n";
+                                }
+                                else
+                                    {
+                                        bool programmer_assignment_flag = 1;
+                                        while(programmer_assignment_flag == 1)
+                                        {
+                                            bool programmer_assigned_flag = 0;
+                                            cout<<"Assign a programmer by name: ";
+                                            string name;
+                                            cin>>name;
+                                            for(int i = 0;i<programmers_list.size();i++)
+                                            {
+                                                if(programmers_list[i].get_name()==name)
+                                                {
+                                                    (*temp).set_programmer(programmers_list[i]);
+                                                    cout<<"Programmer set\n";
+                                                    programmer_assigned_flag = 1;
+                                                    programmer_assignment_flag = 0;
+                                                }
+                                            }
+                                            if(programmer_assigned_flag == 0)
+                                            {
+                                                cout<<"No such programmer was found to be assigned\nTo cancel assignment press 0, to insert another name press 1\n";
+                                                cin>>programmer_assignment_flag;
+                                            }
+                                        }
+                                    }
                                 workitems_list.push_back(temp);
-
                                 break;
                             }
                         case 2:
@@ -133,6 +201,7 @@ void Interactive_menu::menu()
                                     int op3, change_deletion_flag = 0;
                                     cout<<"\nChoose the position of a change to delete\n";
                                     cin>>op3;
+                                    //op3 = menu_try_catch(op3);
                                     for (auto it= positions.begin(); it != positions.end();it++)
                                         {
                                             if(*it==op3)
@@ -191,6 +260,7 @@ void Interactive_menu::menu()
                             {
                                 if(workitems_list.size()>0)
                                 {
+                                    cout<<"\nThere are "<<workitems_list.size()<<" work items:\n";
                                     for (int i=0;i<workitems_list.size();i++)
                                     {
                                         cout<<*workitems_list[i];
@@ -218,6 +288,7 @@ void Interactive_menu::menu()
                         cout<<"\n1 for registering a programmer\n2 for deleting a programmer\n3 for viewing all programmers\n9 for returning to the main menu\n";
                         cout<<"\n";
                         cin>>op2;
+                        //op2 = menu_try_catch(op2);
                         switch(op2)
                         {
                             case 1:

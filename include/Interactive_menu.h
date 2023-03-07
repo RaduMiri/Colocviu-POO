@@ -1,6 +1,6 @@
 #ifndef INTERACTIVE_MENU_H
 #define INTERACTIVE_MENU_H
-
+#include <stddef.h>
 using namespace std;
 
 
@@ -17,5 +17,6 @@ public:
         return ob;
     }
     void menu();
+    int menu_try_catch(int x, int (&options)[10]);
 };
 #endif // INTERACTIVE_MENU_H

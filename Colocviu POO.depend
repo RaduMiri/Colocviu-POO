@@ -1,8 +1,9 @@
 # depslib dependency file v1.0
-1678131981 source:c:\users\mirig\desktop\colocviu poo\main.cpp
+1678222822 source:c:\users\mirig\desktop\colocviu poo\main.cpp
 	<iostream>
 	<vector>
 	<typeinfo>
+	<limits>
 	"Progammer.h"
 	"IO.h"
 	"WorkItem.h"
@@ -29,7 +30,8 @@
 	"WorkItem.h"
 	"Progammer.h"
 
-1678132451 c:\users\mirig\desktop\colocviu poo\include\interactive_menu.h
+1678222790 c:\users\mirig\desktop\colocviu poo\include\interactive_menu.h
+	<stddef.h>
 
 1678132814 source:c:\users\mirig\desktop\colocviu poo\src\bug.cpp
 	"Bug.h"
@@ -38,9 +40,10 @@
 1678132830 source:c:\users\mirig\desktop\colocviu poo\src\change.cpp
 	"Change.h"
 
-1678132470 source:c:\users\mirig\desktop\colocviu poo\src\interactive_menu.cpp
+1678222803 source:c:\users\mirig\desktop\colocviu poo\src\interactive_menu.cpp
 	"Interactive_menu.h"
 	<vector>
+	<limits>
 	"WorkItem.h"
 	"Bug.h"
 	"Change.h"
@@ -50,7 +53,7 @@
 1678132790 source:c:\users\mirig\desktop\colocviu poo\src\io.cpp
 	"IO.h"
 
-1678132951 source:c:\users\mirig\desktop\colocviu poo\src\progammer.cpp
+1678200639 source:c:\users\mirig\desktop\colocviu poo\src\progammer.cpp
 	"Progammer.h"
 
 1678132969 source:c:\users\mirig\desktop\colocviu poo\src\workitem.cpp

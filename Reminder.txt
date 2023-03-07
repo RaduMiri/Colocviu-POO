@@ -1,5 +1,4 @@
-clase: IO, Programmer, WorkItem, Bug, Change, Interactive_menu - headere (trebuie CPP-uri)
-
 Trebuie facute try-catch-uri
-Utilizare functii template la cazurile dublate
+    -
+Utilizare functii template la cazurile dublate ?
 O noua metoda de assignare/utilizat functii samd folosind id-ul workitemului
