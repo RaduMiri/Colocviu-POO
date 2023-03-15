@@ -1,4 +1,18 @@
-Trebuie facute try-catch-uri
-    -
-Utilizare functii template la cazurile dublate ?
+Objectives:
+
 O noua metoda de assignare/utilizat functii samd folosind id-ul workitemului
+    - selection though id
+    - assignment
+
+Deleting a programmer does not dealocate it from its workitems, so do it. (when deleting a programmer)
+
+Extra:
+- beautify console
+- write menu_try_catch with vector instead
+- datetime
+- regex
+
+
+//Trebuie facute try-catch-uri
+//Utilizare functii template la cazurile dublate ?
+//O fct de try-catch in io, sau workitem si programmer sa verifice

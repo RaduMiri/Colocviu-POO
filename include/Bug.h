@@ -19,6 +19,7 @@ public:
     istream& read(istream& in);
     ostream& write(ostream& out) ;
     float cost_to_solve();
+    int int_input(int x, istream &in, string message);
 
     ~Bug(){}
 };

@@ -1,16 +1,5 @@
 #include "Interactive_menu.h"
-#include <vector>
-#include <limits>
-#include "WorkItem.h"
-#include "Bug.h"
-#include "Change.h"
-#include <typeinfo>
-#include "Progammer.h"
-//template<typename T, size_t N>
-//void f(T (&arr)[N])
-//{
-//    // N gives you the size in the body
-//}
+
 Interactive_menu* Interactive_menu::ob {};
 int Interactive_menu::menu_try_catch(int x, int (&options)[10])
 {
@@ -44,11 +33,53 @@ int Interactive_menu::menu_try_catch(int x, int (&options)[10])
         }
     }
 }
+template <class T>
+void Interactive_menu::register_workitem()
+{
+    T *temp;
+    temp = new T;
+    cin>>*temp;
+    if(programmers_list.size()<1)
+        cout<<"No programmer was assigned\n";
+    else
+        {
+            bool programmer_assignment_flag = 1;
+            while(programmer_assignment_flag == 1)
+            {
+                bool programmer_assigned_flag = 0;
+                cout<<"Assign a programmer by name: ";
+                string name;
+                cin>>name;
+                if(name == "")
+                    cout<<"No programmer was assigned\n";
+                else
+                {
+                    for(int i = 0;i<programmers_list.size();i++)
+                    {
+                        if(programmers_list[i].get_name()==name)
+                        {
+                            (*temp).set_programmer(programmers_list[i]);
+                            cout<<"Programmer set\n";
+                            programmer_assigned_flag = 1;
+                            programmer_assignment_flag = 0;
+                        }
+                    }
+                    if(programmer_assigned_flag == 0)
+                    {
+                        cout<<"No such programmer was found to be assigned\nTo cancel assignment press 0, to insert another name press 1\n";
+                        cin>>programmer_assignment_flag;
+                        if(programmer_assignment_flag == 0)
+                            cout<<"No programmer was assigned\n";
+                    }
+                }
+            }
+        }
+    workitems_list.push_back(temp);
+}
 void Interactive_menu::menu()
 {
-    vector<WorkItem*> workitems_list;
-    vector<Programmer> programmers_list;
-    int main_menu_flag = 1, op1;
+    bool main_menu_flag = 1;
+    int op1;
     while(main_menu_flag == 1)
     {
         cout<<"Main menu, press:\n1 for work item options\n2 for programmer options\n3 to exit\n"<<"\n";
@@ -56,7 +87,7 @@ void Interactive_menu::menu()
         op1 = menu_try_catch(op1,options1);
         switch(op1)
         {
-            case 1:
+            case 1: //workitems
                 {
                     int op2, menu_workitem_flag = 1;
                     while(menu_workitem_flag)
@@ -65,205 +96,160 @@ void Interactive_menu::menu()
                         {
                             cout<<"\nCaution! There are no programmers registered so no programmers can be assigned";
                         }
-                        cout<<"\n1 for registering a bug\n2 for registering a change\n3 for deleting a bug\n";
-                        cout<<"4 for deleting a change\n5 for showing all bugs\n6 for showing all changes\n";
-                        cout<<"7 for showing all work items\n9 for returning to the main menu\n"<<"\n";
-                        int options2[10] = {1,2,3,4,5,6,7,9};
-                        cout<<&options2<<" ";
+                        cout<<"\n1 for registering a bug\n2 for registering a change\n";
+                        cout<<"3 for the selector menu\n9 to return to the main menu\n"<<"\n";
+                        int options2[10] = {1,2,3,9};
                         op2 = menu_try_catch(op2, options2);
                         switch(op2)
                         {
-                        case 1:
+                        case 1: //register Bug
                             {
-                                Bug *temp;
-                                temp = new Bug;
-                                cin>>*temp;
-                                if(programmers_list.size()<1)
+                                register_workitem<Bug>();
+                                break;
+                            }
+                        case 2: //register Change
+                            {
+                                register_workitem<Change>();
+                                break;
+                            }
+                        case 3: //selector option, maybe use a while to return to this menu when the operation finishes
+                            {
+                                if(workitems_list.size()>0)
                                 {
-                                    cout<<"No programmer was assigned\n";
-                                }
-                                else
+                                    cout<<"\nSelector menu:\n1 for selecting a work item\n2 for showing all work items\n";
+                                    cout<<"3 for showing all bugs\n4 for showing all changes\n9 to go back\n"<<"\n";
+                                    int options3[10] = {1,2,3,4,9}, op3;
+                                    op3 = menu_try_catch(op3, options3);
+                                    switch(op3)
                                     {
-                                        bool programmer_assignment_flag = 1;
-                                        while(programmer_assignment_flag == 1)
+                                    case 1: //select work item through id
                                         {
-                                            bool programmer_assigned_flag = 0;
-                                            cout<<"Assign a programmer by name: ";
-                                            string name;
-                                            cin>>name;
-                                            for(int i = 0;i<programmers_list.size();i++)
+                                            cout<<"\nSearch for id: ";
+                                            int id;
+                                            bool id_found_flag = 0; //found is true
+                                            cin>>id;
+                                            for(int i = 0;i<workitems_list.size();i++)
                                             {
-                                                if(programmers_list[i].get_name()==name)
+                                                if(id == (*workitems_list[i]).get_workitem_id())
                                                 {
-                                                    (*temp).set_programmer(programmers_list[i]);
-                                                    cout<<"Programmer set\n";
-                                                    programmer_assigned_flag = 1;
-                                                    programmer_assignment_flag = 0;
-                                                }
-                                            }
-                                            if(programmer_assigned_flag == 0)
-                                            {
-                                                cout<<"No such programmer was found to be assigned\nTo cancel assignment press 0, to insert another name press 1\n";
-                                                cin>>programmer_assignment_flag;
-                                            }
-                                        }
-                                    }
-                                workitems_list.push_back(temp);
-                                break;
-                            }
-                        case 2:
-                            {
-                                Change *temp;
-                                temp = new Change;
-                                cin>>*temp;
-                                if(programmers_list.size()<1)
-                                {
-                                    cout<<"No programmer was assigned\n";
-                                }
-                                else
-                                    {
-                                        bool programmer_assignment_flag = 1;
-                                        while(programmer_assignment_flag == 1)
-                                        {
-                                            bool programmer_assigned_flag = 0;
-                                            cout<<"Assign a programmer by name: ";
-                                            string name;
-                                            cin>>name;
-                                            for(int i = 0;i<programmers_list.size();i++)
-                                            {
-                                                if(programmers_list[i].get_name()==name)
-                                                {
-                                                    (*temp).set_programmer(programmers_list[i]);
-                                                    cout<<"Programmer set\n";
-                                                    programmer_assigned_flag = 1;
-                                                    programmer_assignment_flag = 0;
-                                                }
-                                            }
-                                            if(programmer_assigned_flag == 0)
-                                            {
-                                                cout<<"No such programmer was found to be assigned\nTo cancel assignment press 0, to insert another name press 1\n";
-                                                cin>>programmer_assignment_flag;
-                                            }
-                                        }
-                                    }
-                                workitems_list.push_back(temp);
-                                break;
-                            }
-                        case 3:
-                            {
-                                vector <int> positions;
-                                for (int i=0;i<workitems_list.size();i++)
-                                {
-                                    if(string(typeid(*workitems_list[i]).name())=="3Bug")
-                                        {
-                                            cout<<"Position "<<i<<*workitems_list[i];
-                                            positions.push_back(i);
-                                        }
-                                }
-                                if(positions.size()>0)
-                                {
-                                    int op3, bug_deletion_flag = 0;
-                                    cout<<"\nChoose the position of a bug to delete\n";
-                                    cin>>op3;
-                                    for (auto it= positions.begin(); it != positions.end();it++)
-                                        {
-                                            if(*it==op3)
-                                            {
-                                                auto p1 = workitems_list.begin();
-                                                advance(p1,*it);
-                                                workitems_list.erase(p1);
-                                                bug_deletion_flag = 1;
-                                            }
-                                        }
-                                    if(bug_deletion_flag == 0)
-                                    {
-                                        cout<<"There was no such bug found\n";
-                                    }
-                                }
-                                else
-                                    cout<<"\nThere are no bugs listed\n";
-                                positions.clear();
-                                break;
-                            }
-                        case 4:
-                            {
-                                vector <int> positions;
-                                for (int i=0;i<workitems_list.size();i++)
-                                {
-                                    if(string(typeid(*workitems_list[i]).name())=="6Change")
-                                        {
-                                            cout<<"Position "<<i<<*workitems_list[i];
-                                            positions.push_back(i);
-                                        }
-                                }
-                                if(positions.size()>0)
-                                {
-                                    int op3, change_deletion_flag = 0;
-                                    cout<<"\nChoose the position of a change to delete\n";
-                                    cin>>op3;
-                                    //op3 = menu_try_catch(op3);
-                                    for (auto it= positions.begin(); it != positions.end();it++)
-                                        {
-                                            if(*it==op3)
-                                            {
-                                                auto p1 = workitems_list.begin();
-                                                advance(p1,*it);
-                                                workitems_list.erase(p1);
-                                                cout<<"Deleted\n";
-                                                change_deletion_flag = 1;
-                                            }
+                                                    cout<<*workitems_list[i];
+                                                    cout<<"\nWhat to do with the item?\n1 for deleting the item\n2 for changing the assigned programmer\n";
+                                                    cout<<"9 to go back\n";
+                                                    int options4[10] = {1,2,9}, op4;
+                                                    op4 = menu_try_catch(op4, options4);
+                                                    switch(op4)
+                                                    {
+                                                    case 1: //delete work item
+                                                        {
+                                                            cout<<"Are you sure?(0/1): ";
+                                                            bool deletion_flag;
+                                                            cin>>deletion_flag;
+                                                            if(deletion_flag)
+                                                            {
+                                                                workitems_list.erase(workitems_list.begin()+i); //genius move
+                                                                cout<<"Deleted\n";
+                                                            }
+                                                            break;
+                                                        }
+                                                    case 2: //assign programmer
+                                                        {
+                                                            if(programmers_list.size()!=0)
+                                                            {
+                                                                if((*workitems_list[i]).get_programmer_assigned().get_name() == "")
+                                                                    cout<<"There is no programmer assigned\n";
+//                                                                 else
+//                                                                    cout<<(*workitems_list[i]).get_programmer_assigned();
+                                                                else
+                                                                    cout<<"Programmer name: "<<(*workitems_list[i]).get_programmer_assigned().get_name()<<"\n";
+                                                                bool new_programmer_assignment_flag = 1;
+                                                                while(new_programmer_assignment_flag)
+                                                                {
+                                                                    cout<<"Choose programmer by name: ";
+                                                                    string name;
+                                                                    cin>>name;
+                                                                    for(int j =0;i<programmers_list.size();j++)
+                                                                    {
+                                                                        if(programmers_list[j].get_name() == name)
+                                                                        {
 
+                                                                            (*workitems_list[i]).set_programmer(programmers_list[j]);
+                                                                            cout<<"Programmer reassigned successfully";
+                                                                            new_programmer_assignment_flag = 0;
+                                                                            break;
+                                                                        }
+                                                                    }
+                                                                    if(new_programmer_assignment_flag == 1)
+                                                                        cout<<"There is no programmer with this name\n";
+                                                                }
+                                                            }
+                                                            else
+                                                                cout<<"There are no programmers to assign";
+                                                            break;
+                                                        }
+                                                    case 9:
+                                                        {
+                                                            cout<<"\n";
+                                                            break;
+                                                        }
+                                                    }
+                                                    id_found_flag = 1;
+                                                    break;
+
+                                                }
+                                            }
+                                            if(id_found_flag==0)
+                                                cout<<"There is no work item with this id";
+                                            break;
                                         }
-                                    if(change_deletion_flag == 0)
-                                    {
-                                        cout<<"There was no such change found\n";
-                                    }
-                                }
-                                else
-                                    cout<<"\nThere are no changes listed\n";
-                                positions.clear();
-                                break;
-                            }
-                        case 5:
-                            {
-                                if(workitems_list.size()>0)
-                                {
-                                    for (int i=0;i<workitems_list.size();i++)
-                                    {
-                                        if(string(typeid(*workitems_list[i]).name())=="3Bug")
+                                    case 2: //show all work items
+                                        {
+                                            if(workitems_list.size()>0)
                                             {
-                                                cout<<*workitems_list[i];
+                                                cout<<"\nThere is a number of "<<workitems_list.size()<<" work items:\n";
+                                                for (int i=0;i<workitems_list.size();i++)
+                                                    cout<<*workitems_list[i];
                                             }
-                                    }
-                                }
-                                else
-                                    cout<<"\nThere are no bugs\n";
-                                break;
-                            }
-                        case 6:
-                            {
-                                if(workitems_list.size()>0)
-                                {
-                                    for (int i=0;i<workitems_list.size();i++)
-                                    {
-                                        if(string(typeid(*workitems_list[i]).name())=="6Change")
+                                            else
+                                                cout<<"\nThere are no work items\n";
+                                            break;
+                                        }
+                                    case 3: //show bugs
+                                        {
+                                            if(workitems_list.size()>0)
                                             {
-                                                cout<<*workitems_list[i];
+                                                for (int j=0;j<workitems_list.size();j++)
+                                                {
+                                                    if(string(typeid(*workitems_list[j]).name())=="3Bug")
+                                                        {
+                                                            cout<<*workitems_list[j];
+                                                        }
+                                                }
                                             }
-                                    }
-                                }
-                                else
-                                    cout<<"\nThere are no changes\n";
-                                break;
-                            }
-                        case 7:
-                            {
-                                if(workitems_list.size()>0)
-                                {
-                                    cout<<"\nThere are "<<workitems_list.size()<<" work items:\n";
-                                    for (int i=0;i<workitems_list.size();i++)
-                                    {
-                                        cout<<*workitems_list[i];
+                                            else
+                                                cout<<"\nThere are no bugs\n";
+                                            break;
+                                        }
+                                    case 4: //show changes
+                                        {
+                                            if(workitems_list.size()>0)
+                                            {
+                                                for (int j=0;j<workitems_list.size();j++)
+                                                {
+                                                    if(string(typeid(*workitems_list[j]).name())=="6Change")
+                                                        {
+                                                            cout<<*workitems_list[j];
+                                                        }
+                                                }
+                                            }
+                                            else
+                                                cout<<"\nThere are no changes\n";
+                                            break;
+                                        }
+                                    case 9:
+                                        {
+                                            cout<<"\n";
+                                            break;
+                                        }
                                     }
                                 }
                                 else
@@ -280,15 +266,15 @@ void Interactive_menu::menu()
                     }
                     break;
                 }
-            case 2:
+            case 2: //programmers
                 {
                     int op2, menu_programmer = 1;
                     while(menu_programmer == 1)
                     {
                         cout<<"\n1 for registering a programmer\n2 for deleting a programmer\n3 for viewing all programmers\n9 for returning to the main menu\n";
                         cout<<"\n";
-                        cin>>op2;
-                        //op2 = menu_try_catch(op2);
+                        int options2[10] = {1,2,3,9};
+                        op2 = menu_try_catch(op2, options2);
                         switch(op2)
                         {
                             case 1:

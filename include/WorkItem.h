@@ -12,7 +12,7 @@ protected:
     //area of work for workitem, Factory, Finance, etc
     //Status: InProgress, Open, Closed
     int time_commitment; //number of days it took to solve
-    const int id_workitem;
+    const int workitem_id;
     static int counter_workitem;
     Programmer programmer_assigned;
 public:
@@ -26,6 +26,10 @@ public:
     friend istream& operator >>(istream& in, WorkItem& ob);
     friend ostream& operator <<(ostream& out, WorkItem& ob);
 
+
+    int int_input(int x, istream &in, string message);
+    const int get_workitem_id(){return workitem_id;}
+    Programmer get_programmer_assigned(){return programmer_assigned;}
     void set_programmer(Programmer p){programmer_assigned = p;}
     float cost_to_solve(){return 0;}
 

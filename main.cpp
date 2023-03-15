@@ -13,12 +13,8 @@ using namespace std;
 
 int main()
 {
-//    template <typename T>
-//    void register_workitem(T ob)
-
     Interactive_menu* menu;
     menu = menu->get_instance();
     menu->menu();
-
     return 0;
 }

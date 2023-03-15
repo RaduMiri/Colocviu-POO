@@ -2,23 +2,23 @@
 #include <iostream>
 using namespace std;
 
-Bug :: Bug():WorkItem()
+Bug::Bug():WorkItem()
 {
     this->bug_impact = 0;
     this->start_date_work_bug = "";
 }
-Bug :: Bug(int bug_impact, string start_date_work_bug, string date_created, string area, string status, int time_commitment, Programmer programmer_assigned)
+Bug::Bug(int bug_impact, string start_date_work_bug, string date_created, string area, string status, int time_commitment, Programmer programmer_assigned)
 : WorkItem( date_created,  area,  status,  time_commitment,  programmer_assigned)
 {
     this->bug_impact = bug_impact;
     this->start_date_work_bug = start_date_work_bug;
 }
-Bug :: Bug(const Bug& ob) : WorkItem(ob)
+Bug::Bug(const Bug& ob) : WorkItem(ob)
 {
     this->bug_impact = ob.bug_impact;
     this->start_date_work_bug = ob.start_date_work_bug;
 }
-Bug& Bug:: operator=(const Bug& ob)
+Bug& Bug::operator=(const Bug& ob)
 {
     if(this!=&ob)
     {
@@ -28,17 +28,29 @@ Bug& Bug:: operator=(const Bug& ob)
     }
     return *this;
 }
-istream& Bug :: read(istream& in)
+istream& Bug::read(istream& in)
 {
     cout<<"Bug";
     WorkItem :: read(in);
-    cout<<"Bug impact: ";
-    in>>bug_impact;
+    bug_impact = int_input(bug_impact, in, "Bug impact(1-10): ");
     cout<<"Started date of working on the bug: ";
     in>>start_date_work_bug;
     return in;
 }
-ostream& Bug :: write(ostream& out)
+int Bug::int_input(int x, istream &in, string message)
+{
+    bool flag_bug_input;
+    while(!flag_bug_input)
+    {
+        x = WorkItem::int_input(x,in,message);
+        if(x<11)
+            flag_bug_input= 1;
+        else
+            cout<<"Wrong input\n";
+    }
+    return x;
+}
+ostream& Bug::write(ostream& out)
 {
     out<<"\nBug ";
     WorkItem::write(out);

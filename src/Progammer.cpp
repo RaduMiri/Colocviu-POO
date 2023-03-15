@@ -58,7 +58,7 @@ istream& Programmer :: read(istream& in)
 
             }
             cin.clear();
-            cin.ignore();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
     return in;
